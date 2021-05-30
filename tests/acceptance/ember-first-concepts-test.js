@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { click, visit, currentURL } from '@ember/test-helpers';
+import { click, find, visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 
 module('Acceptance | Ember First Concepts', function (hooks) {
@@ -21,6 +21,17 @@ module('Acceptance | Ember First Concepts', function (hooks) {
     assert.dom('h1').containsText('SuperRentals');
     assert.dom('h2').containsText('Grand Old Mansion');
     assert.dom('.rental.detailed').exists();
+    assert.dom('.share.button').hasText('Share on Twitter');
+
+    const button = find('.share.button');
+
+    const tweetURL = new URL(button.href);
+    assert.equal(tweetURL.host, 'twitter.com');
+
+    assert.equal(
+      tweetURL.searchParams.get('url'),
+      `${window.location.origin}/rentals/grand-old-mansion`
+    );
   });
 
   test('visiting /', async function (assert) {
